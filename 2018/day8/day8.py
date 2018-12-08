@@ -7,7 +7,7 @@ for line in fileinput.input():
 input = [int(s) for s in input]
 
 
-class Day7TreeNode:
+class TreeNode:
     children = []
     metadata = []
     inputSize = 0
@@ -19,11 +19,11 @@ class Day7TreeNode:
         inputOffset = 2
 
         for i in range(input[0]):
-            child, childInputOffset = Day7TreeNode.createTree(input[inputOffset:])
+            child, childInputOffset = TreeNode.createTree(input[inputOffset:])
             children.append(child)
             inputOffset += childInputOffset
 
-        tree = Day7TreeNode(input[inputOffset:inputOffset + numMetadata])
+        tree = TreeNode(input[inputOffset:inputOffset + numMetadata])
         tree.children = children
 
         return (tree, inputOffset + numMetadata)
@@ -45,7 +45,7 @@ class Day7TreeNode:
         return sum(self.metadata) + sum([child.getDeepSumOfMetadata() for child in self.children])
 
 
-tree, inputSize = Day7TreeNode.createTree(input)
+tree, inputSize = TreeNode.createTree(input)
 
 print("Sum of all metadata:", tree.getDeepSumOfMetadata())
 print("Value:", tree.getValue())
