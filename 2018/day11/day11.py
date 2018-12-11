@@ -4,32 +4,34 @@ for line in fileinput.input():
     input = int(line.rstrip())
 
 
+def getPowerLevel(x, y):
+    powerLevel = (x + 10) * y
+    powerLevel += input
+    powerLevel *= x + 10
+    powerLevel = (powerLevel // 100) % 10 - 5
+    return powerLevel
+
+
 memo = {}
 
 def getTotalPowerLevelInSquare(p, q, size):
-    if (p, q, size - 2) in memo:
-        total = memo[(p, q, size - 1)] + memo[(p + 1, q + 1, size - 1)] - memo[(p + 1, q + 1, size - 2)]
-        total += powerLevels[(p + size - 1, q)]
-        total += powerLevels[(p, q + size - 1)]
+    if size not in memo:
+        memo[size] = {}
+    if size - 3 in memo:
+        del memo[size - 3]
+
+    if size - 2 in memo:
+        total = memo[size - 1][(p, q)] + memo[size - 1][(p + 1, q + 1)] - memo[size - 2][(p + 1, q + 1)]
+        total += getPowerLevel(p + size - 1, q)
+        total += getPowerLevel(p, q + size - 1)
     else:
         total = 0
         for x in range(p, p + size):
             for y in range(q, q + size):
-                total += powerLevels[(x, y)]
+                total += getPowerLevel(x, y)
 
-    memo[(p, q, size)] = total
+    memo[size][(p, q)] = total
     return total
-
-
-powerLevels = {(x, y): 0 for x in range(1, 301) for y in range(1, 301)}
-
-for x in range(1, 301):
-    for y in range(1, 301):
-        powerLevel = (x + 10) * y
-        powerLevel += input
-        powerLevel *= x + 10
-        powerLevel = (powerLevel // 100) % 10 - 5
-        powerLevels[(x, y)] = powerLevel
 
 
 mostPowerfulSquares = []
